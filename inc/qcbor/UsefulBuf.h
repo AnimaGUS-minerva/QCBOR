@@ -614,7 +614,6 @@ size_t UsefulBuf_FindBytes(UsefulBufC BytesToSearch, UsefulBufC BytesToFind);
 */
 static inline size_t UsefulBuf_PointerToOffset(UsefulBufC UB, const void *p);
 
-
 #ifndef USEFULBUF_DISABLE_DEPRECATED
 /** Deprecated macro; use @ref UsefulBuf_FROM_SZ_LITERAL instead */
 #define SZLiteralToUsefulBufC(szString) \
