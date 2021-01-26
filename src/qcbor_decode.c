@@ -3212,6 +3212,7 @@ void QCBORDecode_GetTaggedStringInMapSZ(QCBORDecodeContext *pMe,
                                         UsefulBufC          *pString)
 {
    QCBORItem Item;
+   memset(&Item, 0, sizeof(Item));
    QCBORDecode_GetTaggedItemInMapSZ(pMe, szLabel, TagSpec, &Item);
    if(pMe->uLastError == QCBOR_SUCCESS) {
       *pString = Item.val.string;
@@ -3620,6 +3621,7 @@ void QCBORDecode_EnterBstrWrappedFromMapN(QCBORDecodeContext *pMe,
                                           UsefulBufC         *pBstr)
 {
    QCBORItem Item;
+   memset(&Item, 0, sizeof(Item));
    QCBORDecode_GetItemInMapN(pMe, nLabel, QCBOR_TYPE_ANY, &Item);
 
    pMe->uLastError = InternalEnterBstrWrapped(pMe,
@@ -3735,6 +3737,7 @@ void QCBORDecode_GetBool(QCBORDecodeContext *pMe, bool *pValue)
 void QCBORDecode_GetBoolInMapN(QCBORDecodeContext *pMe, int64_t nLabel, bool *pValue)
 {
    QCBORItem Item;
+   memset(&Item, 0, sizeof(Item));
    QCBORDecode_GetItemInMapN(pMe, nLabel, QCBOR_TYPE_ANY, &Item);
 
    pMe->uLastError = InterpretBool(pMe, &Item, pValue);
@@ -3833,6 +3836,7 @@ QCBORDecode_GetEpochDateInMapSZ(QCBORDecodeContext *pMe,
                                 int64_t            *pnTime)
 {
    QCBORItem Item;
+   memset(&Item, 0, sizeof(Item));
    QCBORDecode_GetItemInMapSZ(pMe, szLabel, QCBOR_TYPE_ANY, &Item);
    ProcessEpochDate(pMe, &Item, uTagRequirement, pnTime);
 }
@@ -3952,6 +3956,7 @@ void QCBORDecode_GetBignumInMapSZ(QCBORDecodeContext *pMe,
                                   bool               *pbIsNegative)
 {
    QCBORItem Item;
+   memset(&Item, 0, sizeof(Item));
    QCBORDecode_GetItemInMapSZ(pMe, szLabel, QCBOR_TYPE_ANY, &Item);
    if(pMe->uLastError != QCBOR_SUCCESS) {
       return;
@@ -5212,6 +5217,7 @@ void QCBORDecode_GetDoubleConvertAllInMapSZ(QCBORDecodeContext *pMe,
                                             double             *pdValue)
 {
    QCBORItem Item;
+   memset(&Item, 0, sizeof(Item));
    QCBORDecode_GetDoubleConvertInternalInMapSZ(pMe, szLabel, uConvertTypes, pdValue, &Item);
 
    if(pMe->uLastError == QCBOR_SUCCESS) {
