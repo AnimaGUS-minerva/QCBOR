@@ -11,6 +11,13 @@
 # The math library is needed for floating-point support. To
 # avoid need for it #define QCBOR_DISABLE_FLOAT_HW_USE
 LIBS=-lm
+CFLAGS=$(CMD_LINE) -I inc -I test -Os -fPIC
+
+CFLAGS+= -Wall
+CFLAGS+= -Wpointer-arith
+CFLAGS+= -Wcast-qual
+CFLAGS+= -Wstrict-prototypes
+CFLAGS+= -Wbad-function-cast
 
 
 # The QCBOR makefile uses a minimum of compiler flags so that it will
