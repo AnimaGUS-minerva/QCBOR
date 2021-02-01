@@ -46,6 +46,12 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 
+/*
+ * This casts away the const-ness of a pointer, usually so it can be
+ * freed or realloced.
+ */
+//#define UNCONST_POINTER(ptr)    ((void *)(ptr))
+
 #define SIZEOF_C_ARRAY(array,type) (sizeof(array)/sizeof(type))
 
 
@@ -2549,7 +2555,7 @@ MemPool_Pack(UsefulBuf Pool, uint32_t uFreeOffset)
  Code Reviewers: THIS FUNCTION DOES POINTER MATH
  */
 static UsefulBuf
-MemPool_Function(void *pPool, void *pMem, size_t uNewSize)
+MemPool_Function(void *pPool, const void *pMem, size_t uNewSize)
 {
    UsefulBuf ReturnValue = NULLUsefulBuf;
 
@@ -2584,13 +2590,16 @@ MemPool_Function(void *pPool, void *pMem, size_t uNewSize)
             // wrap under because of check that pMem >= pPool.  Cast
             // is safe because the pool is always less than UINT32_MAX
             // because of check in QCBORDecode_SetMemPool().
-            const uint32_t uMemOffset = (uint32_t)((uint8_t *)pMem - (uint8_t *)pPool);
+            const uint32_t uMemOffset = (uint32_t)((const uint8_t *)pMem - (uint8_t *)pPool);
 
             // Check to see if the allocation will fit. uPoolSize -
             // uMemOffset will not wrap under because of check that
             // pMem is in the range of the uPoolSize by check above.
             if(uNewSize <= uPoolSize - uMemOffset) {
-               ReturnValue.ptr = pMem;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-qual"
+               ReturnValue.ptr = (void *)pMem;
+#pragma GCC diagnostic pop
                ReturnValue.len = uNewSize;
 
                // Addition won't wrap around over because uNewSize was
@@ -2615,7 +2624,7 @@ MemPool_Function(void *pPool, void *pMem, size_t uNewSize)
          // FREE MODE
          // Cast is safe because of limit on pool size in
          // QCBORDecode_SetMemPool()
-         uFreeOffset = (uint32_t)((uint8_t *)pMem - (uint8_t *)pPool);
+         uFreeOffset = (uint32_t)((const uint8_t *)pMem - (uint8_t *)pPool);
       } else {
          // DESTRUCT MODE
          // Nothing to do for this allocator

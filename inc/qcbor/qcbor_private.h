@@ -216,7 +216,7 @@ typedef struct __QCBORDecodeNesting  {
 typedef struct  {
    // PRIVATE DATA STRUCTURE
    void *pAllocateCxt;
-   UsefulBuf (* pfAllocator)(void *pAllocateCxt, void *pOldMem, size_t uNewSize);
+   UsefulBuf (* pfAllocator)(void *pAllocateCxt, const void *pOldMem, size_t uNewSize);
 } QCBORInternalAllocator;
 
 
