@@ -1620,7 +1620,6 @@ static inline UsefulBuf UsefulBuf_Unconst(const UsefulBufC UBC)
 #pragma GCC diagnostic pop
 }
 
-
 static inline UsefulBufC UsefulBuf_FromSZ(const char *szString)
 {
    return ((UsefulBufC) {szString, strlen(szString)});
