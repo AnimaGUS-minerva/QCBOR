@@ -1001,6 +1001,63 @@ int32_t ParseEmptyMapInMapTest(void)
 }
 
 /* [[[[[[[[[[]]]]]]]]]] */
+static uint8_t sEmptySeqMap[] = {
+                                 0xd9, 0xd9, 0xf7, 0xda,
+                                 0x4f, 0x50, 0x53, 0x4e,
+                                 0x43, 0x42, 0x4f, 0x52,
+                              0xA1,     //# map(1)
+                              0x02,     //# unsigned(2)
+                              0xA0,     //# map(0)
+};
+
+int32_t ParseEmptyMapInMapAfterSeqTest(void)
+{
+   QCBORDecodeContext DCtx;
+   QCBORItem Item;
+   int nReturn = 0;
+
+   QCBORDecode_Init(&DCtx,
+                    UsefulBuf_FROM_BYTE_ARRAY_LITERAL(sEmptySeqMap),
+                    QCBOR_DECODE_MODE_NORMAL);
+
+   /* now open the first Sequence */
+   nReturn = QCBORDecode_GetNext(&DCtx, &Item);
+   if(nReturn != QCBOR_SUCCESS ||
+      Item.uDataType != QCBOR_TYPE_BYTE_STRING ||
+      Item.uNestingLevel != 0) {
+     nReturn = -4;
+     goto done;
+   }
+
+   if(memcmp(Item.val.string.ptr, "BOR", 3) != 0) {
+      nReturn = -5;
+      goto done;
+   }
+
+   /* now open the first Map */
+   nReturn = QCBORDecode_GetNext(&DCtx, &Item);
+    if(nReturn != QCBOR_SUCCESS ||
+       Item.uDataType != QCBOR_TYPE_MAP) {
+      nReturn = -3;
+      goto done;
+    }
+
+   if(QCBORDecode_GetNext(&DCtx, &Item) != 0) {
+     nReturn = -1;
+     goto done;
+   }
+   if(Item.uDataType != QCBOR_TYPE_MAP ||
+      Item.uNestingLevel != 1 ||
+      Item.label.int64 != 2) {
+     nReturn = -2;
+     goto done;
+   }
+
+ done:
+   return(nReturn);
+}
+
+/* [[[[[[[[[[]]]]]]]]]] */
 static const uint8_t spDeepArrays[] = {
    0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81,
    0x81, 0x80};
