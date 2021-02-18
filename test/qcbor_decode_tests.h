@@ -116,6 +116,7 @@ int32_t ParseMapTest(void);
   Parses a map that contains a zero-length map as value.
 */
 int32_t ParseEmptyMapInMapTest(void);
+int32_t ParseEmptyMapInMapAfterSeqTest(void);
 
 /*
 Test the decoder mode where maps are treated as arrays.
