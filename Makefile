@@ -11,7 +11,8 @@ CC=cc
 #CC=/usr/local/bin/gcc-9
 
 LIBS=-lm
-CFLAGS=$(CMD_LINE) -I inc -I test -Os -fPIC
+DEBUG=
+CFLAGS=$(CMD_LINE) -I inc -I test -Os -fPIC ${DEBUG}
 
 CFLAGS+= -Wall
 CFLAGS+= -Wpointer-arith
@@ -38,7 +39,7 @@ all: qcbortest libqcbor.a
 so:	libqcbor.so
 
 qcbortest: libqcbor.a $(TEST_OBJ) cmd_line_main.o
-	$(CC) -o $@ $^ libqcbor.a $(LIBS)
+	$(CC) ${DEBUG} -o $@ $^ libqcbor.a $(LIBS)
 
 libqcbor.a: $(QCBOR_OBJ)
 	ar -r $@ $^
