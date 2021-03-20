@@ -486,6 +486,11 @@ typedef enum QCBORError {
        indefinite length map or array in the input CBOR. */
    QCBOR_ERR_INDEF_LEN_ARRAYS_DISABLED = 44,
 
+   /** This error type is provided for application protocol use,
+       it is never created by QCBOR itself, and it can be set by
+       additional higher level decoders. */
+   QCBOR_ERR_APPLICATION_PROTOCOL_VIOLATED = 45,
+
    /* This is stored in uint8_t; never add values > 255 */
 } QCBORError;
 
